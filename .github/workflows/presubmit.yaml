@@ -65,7 +65,7 @@ jobs:
         # Fix tests to run over additional operating systems as well as Dart SDK versions:
 
         dart-version: ['stable']
-        os: [ macos-latest ]
+        os: [ macos-latest, windows-latest ]
     runs-on: ${{ matrix.os }} # Use the OS from the matrix
     steps:
       - name: Checkout code
