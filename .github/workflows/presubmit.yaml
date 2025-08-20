@@ -98,8 +98,8 @@ jobs:
         # Pass the Dart SDK path with DART_HOME
         run: |
           "${DART_HOME}/bin/dart --version"
-          "pwd"
-          "./gradlew :test --tests com.jetbrains.dart.analysisServer.*"
+          pwd
+          ./gradlew :test --tests com.jetbrains.dart.analysisServer.*
         working-directory: third_party
 
         
