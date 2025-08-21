@@ -51,30 +51,7 @@ jobs:
         run: ./gradlew :test --tests "com.jetbrains.lang.dart.*"
         working-directory: third_party
 
-      - name: Publish Test Report
-        uses: ctrf-io/github-test-reporter@v1
-        with:
-          report-path: "./target/surefire-reports/*.xml"
-          integrations-config: |
-            {
-              "junit-to-ctrf": {
-              "enabled": true,
-              "action": "convert",
-              "options": {
-                "output": "./ctrf-reports/ctrf-report.json",
-                "toolname": "junit-to-ctrf",
-                "useSuiteName": false
-                }
-              }
-            }
-        if: always()
-
-      - name: Generate Unit Test Reports
-        uses: ctrf-io/github-test-reporter@v1
-
-        if: ${{ !cancelled() }} # run this step even if previous step failed
-        with:
-          name: JUnit Tests # Name of the check run which will be created
+      
 
   # Job 3: Dart Analysis Server Tests
   dart-analysis-server-tests:
@@ -117,22 +94,6 @@ jobs:
           ./gradlew :test --tests "com.jetbrains.dart.analysisServer.*"
         working-directory: third_party
 
-      - name: Generate Server Test Reports
-        uses: step-security/test-reporter@v2
-        if: ${{ !cancelled() }} # run this step even if previous step failed
-        with:
-          name: JEST Tests # Name of the check run which will be created
-          path: reports/jest-*.xml # Path to test results
-          reporter: jest-junit # Format of test results
-
-      #- name: (WINDOWS) Run Dart Analysis Server Tests with Dart SDK ${{ matrix.dart-version }}
-      #  if: runner.os == 'Windows' # Run even if one SDK version fails
-      #  # Pass the Dart SDK path with DART_HOME
-      #  run: |
-      #    ${DART_HOME}/bin/dart --version
-      #    pwd
-      #    ./gradlew :test --tests com.jetbrains.dart.analysisServer.*
-      #  working-directory: third_party
 
   # Job 4: Verify Plugin
   verify-plugin:
