@@ -31,6 +31,7 @@ jobs:
 
   # Job 2: Unit Tests
   unit-tests:
+    needs: build-plugin
     strategy:
       matrix:
         # TODO(https://github.com/flutter/dart-intellij-third-party/pull/33) Fix and enable execution on Windows
@@ -55,6 +56,7 @@ jobs:
 
   # Job 3: Dart Analysis Server Tests
   dart-analysis-server-tests:
+    needs: build-plugin
     strategy:
       matrix:
         # https://github.com/dart-lang/setup-dart
@@ -97,6 +99,7 @@ jobs:
 
   # Job 4: Verify Plugin
   verify-plugin:
+    needs: build-plugin
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
