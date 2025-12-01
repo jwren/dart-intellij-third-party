@@ -63,6 +63,16 @@ intellijPlatform {
         subsystemsToCheck = VerifyPluginTask.Subsystems.ALL
         ides {
             recommended()
+            select {
+                types = listOf(
+                    IntelliJPlatformType.IntellijIdeaCommunity,
+                    IntelliJPlatformType.IntellijIdeaUltimate,
+                    IntelliJPlatformType.AndroidStudio,
+                    IntelliJPlatformType.WebStorm,
+                    IntelliJPlatformType.GoLand
+                )
+                channels = listOf(ProductRelease.Channel.RELEASE)
+            }
         }
     }
 }
