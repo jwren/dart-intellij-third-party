@@ -19,6 +19,7 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.jetbrains.lang.dart.dtd.DTDProcess
 import com.jetbrains.lang.dart.dtd.DTDProcessListener
+import com.jetbrains.lang.dart.ide.toolingDaemon.DartToolingDaemonService
 import com.jetbrains.lang.dart.sdk.DartSdk
 import com.jetbrains.lang.dart.util.PrintingLogger
 import de.roderick.weberknecht.WebSocketException
@@ -253,13 +254,11 @@ abstract class AnalyticsData(type: String, val project: Project? = null) {
 }
 
 object AnalyticsConstants {
-
   /**
    * The unique identifier for an action or event.
    */
   @JvmField
   val ID = StringValue("id")
-
 
   /**
    * The UI location where an action was invoked, as provided by
@@ -322,8 +321,47 @@ internal object NoOpReporter : AnalyticsReporter() {
 }
 
 internal object UnifiedAnalyticsReporter : AnalyticsReporter() {
+  object UAProperty {
+    const val EVENT = "event"
+    const val EVENT_DATA = "eventData"
+    const val EVENT_NAME = "ide_event"
+    const val TOOL = "tool"
+  }
+
+  const val IDE_EVENT = "ide_event"
+
   override fun process(data: AnalyticsData) {
-    // TODO (pq): implement
+    val project = data.project ?: return
+
+    val params = JsonObject()
+    params.addProperty(UAProperty.TOOL, getToolName())
+
+    val event = JsonObject()
+    event.addProperty(UAProperty.EVENT_NAME, IDE_EVENT)
+
+    val evenData = JsonObject()
+    for (entry in data.data) {
+      when (val value = entry.value) {
+        is String -> evenData.addProperty(entry.key, value)
+        is Boolean -> evenData.addProperty(entry.key, value)
+        is Int -> evenData.addProperty(entry.key, value)
+        else -> {
+          // TODO (pq): consider logging
+        }
+      }
+    }
+    event.add(UAProperty.EVENT_DATA, evenData)
+
+    // Note: encoded as a string.
+    params.addProperty(UAProperty.EVENT, event.toString())
+
+    // TODO (pq): temporary
+    // print(params.toString())
+
+    DartToolingDaemonService.getInstance(project).sendRequest("${UnifiedAnalytics.SERVICE_NAME}.${UnifiedAnalytics.SEND}", params, true) { response: JsonObject ->
+      // TODO (pq): temporary
+      // print(response)
+    }
   }
 }
 
