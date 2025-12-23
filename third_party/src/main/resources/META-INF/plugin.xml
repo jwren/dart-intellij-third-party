@@ -118,6 +118,10 @@
     <fileBasedIndex implementation="com.jetbrains.lang.dart.ide.index.DartComponentIndex"/>
     <fileBasedIndex implementation="com.jetbrains.lang.dart.ide.index.DartSymbolIndex"/>
 
+    <indexPatternBuilder implementation="com.jetbrains.lang.dart.ide.index.DartIndexPatternBuilder"/>
+
+
+
     <!-- moduleBuilder works in IntelliJ IDEA only -->
     <moduleBuilder builderClass="com.jetbrains.lang.dart.projectWizard.DartModuleBuilder"/>
     <!-- directoryProjectGenerator works in WebStorm and other small IDEs -->

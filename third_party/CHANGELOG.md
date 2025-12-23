@@ -12,6 +12,7 @@
 
 - Fixed resolution for Dart dot shorthands (e.g. `.new`, `.named`). (#89)
 - UI freeze during refactoring operations (e.g. Move File) when Analysis Server is slow (#122)
+- Fixed TODO indexing for Dart files.
 
 
 ## 500.0.0
