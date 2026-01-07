@@ -51,7 +51,8 @@ public final class DartSdkUtil {
 
     final String version = FileUtil.loadFileOrNull(versionFile);
     if (version != null) {
-      return ourVersions.put(versionPair, version);
+      ourVersions.put(versionPair, version);
+      return version;
     }
 
     return null;
